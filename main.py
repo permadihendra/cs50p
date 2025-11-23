@@ -68,8 +68,10 @@ Shield : {char["shield"]}
 
 
 def main():
+    # Create Char Name
     char["name"] = create_char()
     display_stat(char["name"])
+    # Equip items
     equip_item(items["iron_sword"], "sword")
     equip_item(items["wooden_shield"], "shield")
     display_stat(char["name"])
