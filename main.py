@@ -1,4 +1,10 @@
+import os
+import subprocess
+import time
+from ast import Constant
 from typing import Dict
+
+GAME_PLAY: bool = True
 
 char = {
     "name": "New Player",
@@ -52,7 +58,17 @@ def equip_item(item: Dict, type: str):
         print("Equip item failed!")
 
 
-def display_stat(name: str):
+def equip_item_set():
+    equip_item(items["iron_sword"], "sword")
+    equip_item(items["wooden_shield"], "shield")
+    time.sleep(1)
+    print("back to menu ...")
+    time.sleep(2)
+    back_to_menu()
+
+
+def display_stat():
+    clear_screen()
     print(
         f"""
 Character Name : {char["name"]}
@@ -65,17 +81,91 @@ Sword : {char["sword"]}
 Shield : {char["shield"]}
 """
     )
+    time.sleep(1)
+    print("back to menu ...")
+    time.sleep(2)
+    back_to_menu()
+
+
+def clear_screen():
+    if os.name == "nt":
+        # Use subprocess for better practice on modern Windows
+        subprocess.run("cls", shell=True)
+    else:
+        # Use subprocess for better practice on Unix/Linux/macOS
+        subprocess.run("clear", shell=True)
+
+
+def back_to_menu():
+    clear_screen()
+    display_menu(char["name"], menu_display)
+    choice = int(input("What sould you like to do? "))
+    select_action(menu_action, choice)
+
+
+def stop_game():
+    global GAME_PLAY
+    GAME_PLAY = False
+
+
+def exit():
+    clear_screen()
+    print("Thank you for playing")
+    time.sleep(1)
+    print("Exiting Game ...")
+    time.sleep(1)
+    print("...")
+    stop_game()
+
+
+# Game Menu - Action
+menu_action = {
+    1: display_stat,
+    2: equip_item_set,
+    9: exit,
+    0: back_to_menu,
+}
+
+menu_display = {
+    "1": "Show Stats",
+    "2": "Equip Item Set",
+    "9": "Exit Game",
+    "0": "back to menu",
+}
+
+
+def display_menu(name: str, menu_display: Dict):
+    clear_screen()
+    print(
+        f"""
+Welcome to the wonderful Journey : {name} !
+====================================
+Please Select Action Menu:"""
+    )
+    for key, value in menu_display.items():
+        print(f"[{key}] -> {value}")
+
+
+## cs50 implement raise exception
+def select_action(menu_action: Dict, choice: int):
+    action = menu_action.get(choice)
+
+    if action:
+        action()
+    else:
+        raise ValueError("Invalid Action")
 
 
 def main():
     # Create Char Name
     char["name"] = create_char()
-    display_stat(char["name"])
-    # Equip items
-    equip_item(items["iron_sword"], "sword")
-    equip_item(items["wooden_shield"], "shield")
-    display_stat(char["name"])
+
+    display_menu(char["name"], menu_display)
+    choice = int(input("What sould you like to do? "))
+    select_action(menu_action, choice)
 
 
 if __name__ == "__main__":
-    main()
+    while GAME_PLAY:
+        # print(GAME_PLAY)
+        main()
