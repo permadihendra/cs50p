@@ -1,4 +1,5 @@
 import os
+import random
 import subprocess
 import time
 from typing import Dict
@@ -36,6 +37,36 @@ items = {
     },
 }
 
+monsters = {
+    "kobold1": {
+        "name": "Warrior Kobold",
+        "stats": {
+            "hp": 60,
+            "atp": 10,
+            "def": 10,
+            "agi": 5,
+        },
+    },
+    "kobold2": {
+        "name": "King Kobold",
+        "stats": {
+            "hp": 200,
+            "atp": 15,
+            "def": 8,
+            "agi": 7,
+        },
+    },
+    "orc1": {
+        "name": "Infantry Orc",
+        "stats": {
+            "hp": 60,
+            "atp": 10,
+            "def": 5,
+            "agi": 5,
+        },
+    },
+}
+
 
 def create_char() -> str:
     name = input("Enter Character Name : ")
@@ -58,8 +89,10 @@ def equip_item(item: Dict, type: str):
 
 
 def equip_item_set():
+    clear_screen()
     equip_item(items["iron_sword"], "sword")
     equip_item(items["wooden_shield"], "shield")
+
     time.sleep(1)
     print("back to menu ...")
     time.sleep(2)
@@ -82,6 +115,24 @@ Shield : {char["shield"]}
     )
     time.sleep(1)
     print("back to menu ...")
+    time.sleep(2)
+    back_to_menu()
+
+
+# Dungeon and Monster
+
+
+def enter_dungeon():
+    global monsters
+    monster_suffled = []
+    for key, value in monsters.items():
+        monster_suffled.append(key)
+    random.shuffle(monster_suffled)
+    clear_screen()
+    print("Wild monster appear !!")
+    print(monsters[monster_suffled[0]])
+    time.sleep(1)
+    print("Monster start attacking !!")
     time.sleep(2)
     back_to_menu()
 
@@ -121,6 +172,7 @@ def exit():
 menu_action = {
     1: display_stat,
     2: equip_item_set,
+    3: enter_dungeon,
     9: exit,
     0: back_to_menu,
 }
@@ -128,6 +180,7 @@ menu_action = {
 menu_display = {
     "1": "Show Stats",
     "2": "Equip Item Set",
+    "3": "Enter Dungeon",
     "9": "Exit Game",
     "0": "back to menu",
 }
@@ -156,15 +209,16 @@ def select_action(menu_action: Dict, choice: int):
 
 
 def main():
-    # Create Char Name
-    char["name"] = create_char()
-
     display_menu(char["name"], menu_display)
     choice = int(input("What sould you like to do? "))
     select_action(menu_action, choice)
 
 
 if __name__ == "__main__":
+    clear_screen()
+    # Create Char Name
+    char["name"] = create_char()
+
     while GAME_PLAY:
         # print(GAME_PLAY)
         main()
