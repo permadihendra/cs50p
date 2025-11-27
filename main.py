@@ -4,6 +4,9 @@ import subprocess
 import time
 from typing import Dict
 
+import requests
+from rich import print
+
 GAME_PLAY: bool = True
 
 char = {
@@ -119,22 +122,59 @@ Shield : {char["shield"]}
     back_to_menu()
 
 
+def get_monster():
+    try:
+        monster_name = ["acolyte", "griffon", "kobold"]
+        monster_selected = random.choice(monster_name)
+        url = f"https://www.dnd5eapi.co/api/2014/monsters/{monster_selected}"
+        payload = {}
+        headers = {"Accept": "application/json"}
+        response = requests.request("GET", url, headers=headers, data=payload)
+        response.raise_for_status()
+        return response.json()
+    except requests.HTTPError:
+        print("Couldn't complete request!")
+        return None
+    except Exception as e:
+        print("Error getting data: ", e)
+        return None
+
+
 # Dungeon and Monster
-
-
 def enter_dungeon():
-    global monsters
-    monster_suffled = []
-    for key, value in monsters.items():
-        monster_suffled.append(key)
-    random.shuffle(monster_suffled)
+    # global monsters
+    # monster_suffled = []
+    # for key, value in monsters.items():
+    #     monster_suffled.append(key)
+    # random.shuffle(monster_suffled)
     clear_screen()
-    print("Wild monster appear !!")
-    print(monsters[monster_suffled[0]])
-    time.sleep(1)
-    print("Monster start attacking !!")
-    time.sleep(2)
-    back_to_menu()
+    try:
+        json_data = get_monster()
+        # print(json_data)
+
+        if json_data is None:
+            print("Can't display monster data - no JSON returned.")
+            return
+
+        print(f"""
+    Monster Appeared !!
+    ===================
+    Name : {json_data["name"]}
+    HP : {json_data["hit_points"]}
+    ATP : {json_data["strength"]}
+    DEF : {json_data["constitution"]}
+    AGI : {json_data["dexterity"]}
+                """)
+        time.sleep(3)
+        print("You Attack First!!")
+        time.sleep(2)
+        print("The monster strike back!!")
+        time.sleep(2)
+        print("Exiting dungeon ...")
+        time.sleep(1)
+        print("...")
+    except Exception as e:
+        print("Unexpected error:", e)
 
 
 def clear_screen():
