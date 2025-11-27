@@ -1,4 +1,4 @@
-from monster import get_monster
+from data.monster import get_monster
 
 
 def test_get_monster():
