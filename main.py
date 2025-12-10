@@ -1,6 +1,8 @@
 import os
+import re
 import subprocess
 import time
+from getpass import getpass
 from typing import Dict
 
 from rich import print
@@ -69,6 +71,24 @@ monsters = {
         },
     },
 }
+
+
+def login():
+    print("Input Email and Password to Login :")
+    print("==================================")
+    email = input("Email: ")
+    password = getpass("Password: ")
+    print("==================================")
+
+    if re.search(r"^[^\s@]+@[^\s@]+\.[^\s@]+$", email):
+        print("Login successfull")
+    else:
+        print("Login Failed, wrong email")
+        return
+
+    credential = {"email": email, "password": password}
+
+    return credential
 
 
 def create_char() -> str:
@@ -238,9 +258,15 @@ def main():
 
 if __name__ == "__main__":
     clear_screen()
-    # Create Char Name
-    char["name"] = create_char()
+    # Run Login
+    credential = login()
+    # Continue if login credential valid
+    if credential:
+        # Create Char Name
+        char["name"] = create_char()
 
-    while GAME_PLAY:
-        # print(GAME_PLAY)
-        main()
+        while GAME_PLAY:
+            # print(GAME_PLAY)
+            main()
+    else:
+        print("Authentication failed, Try logging in again ...")
