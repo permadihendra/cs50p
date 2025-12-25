@@ -1,7 +1,7 @@
 class Character:
-    def __init__(self, name, job):
-        self.name = name
-        self.job = job
+    def __init__(self, name: str, job: str):
+        self.name: str = name
+        self.job: str = job
 
 
 def main():
