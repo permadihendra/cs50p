@@ -9,3 +9,15 @@ dependencies = [
     "requests>=2.32.5",
     "rich>=14.2.0",
 ]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+fixable = ["ALL"]
+
+[tool.ruff.format]
+indent-style = "space"
+line-ending = "lf"
