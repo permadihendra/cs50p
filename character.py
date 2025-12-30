@@ -24,6 +24,7 @@ class Character(Stat):
     agility: int
     inventory: list[Item] = [ ]
     equipment: dict[str, bool] = {"sword": False, "shield": False}
+    equipment_list: list[Item] = []
 
     def __init__(
         self, id: int, name: str, health: int, attack: int, defend: int, agility: int
@@ -33,11 +34,11 @@ class Character(Stat):
         self.name: str = name
 
     def equip_item(self, item:Item)-> None:
-        if self.equipment[item.type] is True:
+        if self.equipment[item.type] is True :
             print(f"Item '{item.type}' already equiped")
             return
         elif item not in self.inventory:
-            print(f"Item {item.name} not found in inventory")
+            print(f"Item '{item.name}' not found in inventory")
             return
         else:
             self.health += item.health
@@ -46,6 +47,7 @@ class Character(Stat):
             self.agility += item.agility
             self.inventory.remove(item)
             self.equipment[item.type] = True
+            self.equipment_list.append(item)
             print(f"Successfull equip: {item.name} !") 
            
 
@@ -69,6 +71,10 @@ Attack  : {self.attack}
 Defend  : {self.defend}
 Agility : {self.agility}
 -------------------------
+EQUIPPED
+-------------------------
+{[item.name for item in self.equipment_list]}
+-------------------------
 INVENTORY
 -------------------------
 {[item.name for item in self.inventory]}
@@ -81,7 +87,7 @@ def main():
     shield = Item(id=1, name="Iron Shield", type="shield", defend=15)
     
     char.save_item(sword)
-    #char.save_item(shield)
+    char.save_item(shield)
 
     char.equip_item(sword) 
     char.equip_item(shield)
