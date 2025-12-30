@@ -49,7 +49,27 @@ class Character(Stat):
             self.equipment[item.type] = True
             self.equipment_list.append(item)
             print(f"Successfull equip: {item.name} !") 
-           
+
+    def equip_remove(self, item:Item)-> None:
+        if item not in self.equipment_list:
+            print(f"Item '{item.name}' not equiped")
+            return
+        elif self.equipment[item.type] is False:
+            print(f"No '{item.type}' is equiped")
+            return
+        else:
+            # Remove stats
+            self.health -= item.health
+            self.attack -= item.attack
+            self.defend -= item.defend
+            self.agility -= item.agility
+
+            # Clear Equipemnt
+            self.equipment_list.remove(item)
+            self.inventory.append(item)
+            self.equipment[item.type] = False
+            print(f"Successfully remove '{item.name}' !")
+            return
 
     def save_item(self, item: Item):
         self.inventory.append(item)
@@ -95,6 +115,10 @@ def main():
     print(char)
 
     char.equip_item(shield)
+
+    char.equip_remove(shield)
+
+    print(char)
 
 
 if __name__ == "__main__":
