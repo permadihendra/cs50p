@@ -17,21 +17,22 @@ class Item(Stat):
         self.type: str = type
 
 class Character(Stat):
-    # class atribute
-    health: int
-    attack: int
-    defend: int
-    agility: int
-    inventory: list[Item] = [ ]
-    equipment: dict[str, bool] = {"sword": False, "shield": False}
-    equipment_list: list[Item] = []
-
+    
     def __init__(
         self, id: int, name: str, health: int, attack: int, defend: int, agility: int
     ):
         super().__init__(health, attack, defend, agility)
         self.id: int = id
         self.name: str = name
+        # already defined in Stat
+        #self.health: int = health
+        #self.attack: int = attack
+        #self.defend: int = defend 
+        #self.agility: int = agility 
+        self.inventory: list[Item] = [ ]
+        self.equipment: dict[str, bool] = {"sword": False, "shield": False}
+        self.equipment_list: list[Item] = []
+
 
     def equip_item(self, item:Item)-> None:
         if self.equipment[item.type] is True :
@@ -103,6 +104,7 @@ INVENTORY
 
 def main():
     char = Character(1, "Joni", 100, 35, 30, 20)
+    char2 = Character(2, "Hongki", 100, 20,20,10)
     sword = Item(id=1, name="Long Sword", type="sword", attack=10)
     shield = Item(id=1, name="Iron Shield", type="shield", defend=15)
     
@@ -119,6 +121,8 @@ def main():
     char.equip_remove(shield)
 
     print(char)
+
+    print(char2)
 
 
 if __name__ == "__main__":
